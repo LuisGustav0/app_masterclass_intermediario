@@ -1,4 +1,6 @@
 class FileUtils {
+  static const int _SPACE_UNICODE = 32;
+
   static String getKey(List<String> keyAndValue) {
     if (keyAndValue.isEmpty) return '';
 
@@ -20,20 +22,24 @@ class FileUtils {
 
     final keyAndValueAux = [...keyAndValue];
 
-    if (keyAndValueAux.length > 1) {
+    if (keyAndValueAux.length > 2) {
       keyAndValueAux.removeAt(0);
 
       return keyAndValueAux.join('').trim();
     }
 
-    return keyAndValue[1].trim();
+    final value = keyAndValue[1];
+
+    return value.isEmpty ? <String, dynamic>{} : value.trim();
   }
 
   static int getLevelSpaceLeft(List<String> keyAndValue) {
     final String key = getKey(keyAndValue);
 
-    final List listSplit = key.split(' ');
-    final int count = listSplit.length;
+    final listUnicode32 =
+        key.runes.where((value) => value == _SPACE_UNICODE).toList();
+
+    final int count = listUnicode32.length;
 
     return count;
   }
